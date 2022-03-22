@@ -53,7 +53,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         zValue = sensorEvent.values[2];
 
 
-        // Formatting decimals
+        // Formatting sensor decimals
         DecimalFormat df = new DecimalFormat("###.##");
         String x = df.format(xValue);
         String y = df.format(yValue);
