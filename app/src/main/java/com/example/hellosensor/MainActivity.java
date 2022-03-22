@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** Call this method when Send-button is clicked **/
-
     public void sendMessage(View view) {
         Intent intent = new Intent(this, DisplayMessageActivity.class);
         EditText editText = (EditText) findViewById(R.id.editTextTextPersonName);
@@ -26,4 +25,21 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
+
+
+    public void openCompass(View view) {
+        Intent intent = new Intent(this, CompassActivity.class);
+
+
+        startActivity(intent);
+    }
+
+    public void openAccelerometer(View view) {
+        Intent intent = new Intent(this, AccelerometerActivity.class);
+
+
+        startActivity(intent);
+    }
+
+
 }
