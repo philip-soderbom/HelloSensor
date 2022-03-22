@@ -2,13 +2,88 @@ package com.example.hellosensor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.widget.TextView;
+
 import android.os.Bundle;
 
-public class AccelerometerActivity extends AppCompatActivity {
+import java.text.DecimalFormat;
+
+public class AccelerometerActivity extends AppCompatActivity implements SensorEventListener {
+
+    private TextView xValueText, yValueText, zValueText, orientation;
+    private Sensor accelerometer;
+    private SensorManager SM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accelerometer);
+
+        // create SensorManager
+        SM = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        // accelerometer Sensor
+        accelerometer = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        // register Sensor Listener
+        SM.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        // Assign variables to TextViews
+        xValueText = findViewById(R.id.xValue);
+        yValueText = findViewById(R.id.yValue);
+        zValueText = findViewById(R.id.zValue);
+
+        orientation = findViewById(R.id.orientationText);
+
+    }
+
+
+    // methods from "implements SensorEventListener"
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        // sensor data
+        double xValue, yValue, zValue;
+        xValue = sensorEvent.values[0];
+        yValue = sensorEvent.values[1];
+        zValue = sensorEvent.values[2];
+
+
+        // Formatting decimals
+        DecimalFormat df = new DecimalFormat("###.##");
+        String x = df.format(xValue);
+        String y = df.format(yValue);
+        String z = df.format(zValue);
+
+        // updating TextViews using resource string with placeholders
+        xValueText.setText(getString(R.string.accelerometer_value, "X", x));
+        yValueText.setText(getString(R.string.accelerometer_value, "Y", y));
+        zValueText.setText(getString(R.string.accelerometer_value, "Z", z));
+
+
+        detectOrientation(xValue, yValue, zValue);
+    }
+
+    private void detectOrientation(double x, double y, double z) {
+        int limit = 5;
+        if (y > limit) setOrientation("Portrait (Up-Right)");
+        else if (y < -limit) setOrientation("Upside-Down");
+        else if (x > limit) setOrientation("Left");
+        else if (x < -limit) setOrientation("Right");
+        else setOrientation("Not Detected");
+
+    }
+
+    private void setOrientation(String orientationString) {
+        orientation.setText(getString(R.string.orientation_value, "Orientation", orientationString));
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+        // not in use
     }
 }

@@ -11,7 +11,16 @@ Resurser som har använts:
 ### Accelerometer
 - Sensor Event: https://developer.android.com/reference/android/hardware/SensorEvent.html
 - Sensor Manager: https://developer.android.com/reference/android/hardware/SensorManager.html
-- YouTube video: https://www.youtube.com/watch?v=YrI2pCZC8cc
+- YouTube-video: https://www.youtube.com/watch?v=YrI2pCZC8cc
+    - Med denna video kunde jag importera de objekt jag behövde samt uppdatera mina
+    TextView-objekt i layouten, då sensorn kände av förändringar
+    - Uppdateringarna gör jag i metoden onSensorChanged() som kommer från interfacet
+    SensorEventListener som klassen implementerar
+
+För att avrunda decimalerna tog jag hjälp av denna sida: https://www.baeldung.com/java-round-decimal-number
+
+Hittade hjälp på Stack Overflow om hur man kunde skapa en **string resource** med placeholders
+Gjorde detta eftersom jag fick varningar om att man inte skulle konkatenera text med setText
 
 ### Compass
 - Artikel: https://www.wlsdevelop.com/index.php/en/blog?option=com_content&view=article&id=38
@@ -25,6 +34,8 @@ Resurser som har använts:
 
 ### Acceleromter
 
+Jag har lagt till så att man ser vilken lutning telefonen har
+åtminstone för de exakta lutningarna (upp, ner, vänster, höger)
 
 
 

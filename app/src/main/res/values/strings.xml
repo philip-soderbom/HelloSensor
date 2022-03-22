@@ -1,8 +1,16 @@
 <resources>
+    <!-- ========= MAIN ========= -->
     <string name="app_name">Hello Sensor</string>
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>
-    <string name="index_text">Choose sensor(s) to test:</string>
+    <string name="index_text">Choose sensor to test:</string>
     <string name="button_compass">Compass</string>
     <string name="button_accelerometer">Accelerometer</string>
+
+    <!-- ========= ACCELEROMETER ========= -->
+    <string name="acc_head_text">Accelerometer values:</string>
+    <string name="accelerometer_value">%1$s: %2$s</string>
+    <string name="orientation_value">%1$s: %2$s</string>
+
+    <!-- ========= COMPASS ========= -->
 </resources>
