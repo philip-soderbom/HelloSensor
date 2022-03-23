@@ -14,4 +14,6 @@
 
     <!-- ========= COMPASS ========= -->
     <string name="compass_heading">Heading: %1$s degrees</string>
+    <string name="direction_text">Direction: </string>
+    <string name="progress_text">progress text </string>
 </resources>

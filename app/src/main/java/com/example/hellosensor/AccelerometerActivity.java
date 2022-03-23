@@ -74,6 +74,8 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         else if (y < -limit) setOrientation("Upside-Down");
         else if (x > limit) setOrientation("Left");
         else if (x < -limit) setOrientation("Right");
+        else if (z > limit) setOrientation("Facing Up");
+        else if (z < -limit) setOrientation("Facing Down");
         else setOrientation("Not Detected");
 
     }
