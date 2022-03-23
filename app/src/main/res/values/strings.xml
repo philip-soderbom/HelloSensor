@@ -13,4 +13,5 @@
     <string name="orientation_value">%1$s: %2$s</string>
 
     <!-- ========= COMPASS ========= -->
+    <string name="compass_heading">Heading: %1$s degrees</string>
 </resources>
