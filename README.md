@@ -30,7 +30,7 @@ Gjorde detta eftersom jag fick varningar om att man inte skulle konkatenera text
 
 
 
-## Eventuella modifikationer
+## Eventuella modifieringar
 
 ### Acceleromter
 
