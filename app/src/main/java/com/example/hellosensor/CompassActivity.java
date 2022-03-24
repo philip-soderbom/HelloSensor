@@ -2,86 +2,71 @@ package com.example.hellosensor;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.os.Vibrator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class CompassActivity extends AppCompatActivity implements SensorEventListener{
-    ImageView compass_img;
-    TextView txt_compass;
+public class CompassActivity extends AppCompatActivity implements SensorEventListener {
+
+    ImageView img_compass;
+    TextView txt_azimuth;
     int mAzimuth;
     private SensorManager mSensorManager;
     private Sensor mRotationV, mAccelerometer, mMagnetometer;
-    boolean haveSensor = false, haveSensor2 = false;
     float[] rMat = new float[9];
-    float[] orientation = new float[3];
+    float[] orientation = new float[9];
+
     private float[] mLastAccelerometer = new float[3];
     private float[] mLastMagnetometer = new float[3];
+    private boolean haveSensor = false, haveSensor2 = false;
     private boolean mLastAccelerometerSet = false;
     private boolean mLastMagnetometerSet = false;
-    private Vibrator v;
-    private String choosenDirection = "";
-    private TextView bN, bW, bE, bS;
-    private TextView[] buttons;
-    private String last = "";
-
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        compass_img = (ImageView) findViewById(R.id.img_compass);
-        txt_compass = (TextView) findViewById(R.id.txt_azimuth);
+        img_compass = (ImageView) findViewById(R.id.img_compass);
+        txt_azimuth = (TextView) findViewById(R.id.txt_azimuth);
 
         start();
-
-/*        bN = (TextView)findViewById(R.id.bN);
-        bW = (TextView)findViewById(R.id.bW);
-        bE = (TextView)findViewById(R.id.bE);
-        bS = (TextView)findViewById(R.id.bS);
-        buttons = new TextView[] {bN, bW, bE, bS};
-        progressText = (TextView)findViewById(R.id.progressText);*/
-
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
             SensorManager.getRotationMatrixFromVector(rMat, event.values);
-            mAzimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0]) + 360) % 360;
+            mAzimuth = (int) ((Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0])+360)%360);
+
         }
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
             mLastAccelerometerSet = true;
+
         } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
             mLastMagnetometerSet = true;
         }
+
         if (mLastAccelerometerSet && mLastMagnetometerSet) {
             SensorManager.getRotationMatrix(rMat, null, mLastAccelerometer, mLastMagnetometer);
             SensorManager.getOrientation(rMat, orientation);
-            mAzimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0]) + 360) % 360;
+            mAzimuth = (int) ((Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0])+360)%360);
         }
 
         mAzimuth = Math.round(mAzimuth);
-        compass_img.setRotation(-mAzimuth);
+        img_compass.setRotation(-mAzimuth);
 
         String where = "NW";
 
@@ -102,54 +87,44 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         if (mAzimuth <= 80 && mAzimuth > 10)
             where = "NE";
 
-        txt_compass.setText(mAzimuth + "° " + where);
-
-//        if(where.equals(choosenDirection) && !where.equals(last)) {
-//            v.vibrate(400);
-//            progressText.setText("You're heading in the right direction!");
-//            progressText.setTextColor(Color.parseColor("#B86191"));
-//        }else if(!where.equals(last)) {
-//            progressText.setText("Use the Compass to find the way!");
-//            progressText.setTextColor(Color.BLACK);
-//        }
-        last = where;
+        txt_azimuth.setText(mAzimuth + "° " + where);
     }
 
-
-
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
 
     public void start() {
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
-            if ((mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null) || (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null)) {
-                noSensorsAlert();
+            if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null || mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null) {
+                noSensorAlert();
             }
             else {
                 mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
                 mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
                 haveSensor = mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
                 haveSensor2 = mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_UI);
             }
         }
-        else{
-            mRotationV = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        else {
+            mRotationV = mSensorManager.getDefaultSensor((Sensor.TYPE_ROTATION_VECTOR));
             haveSensor = mSensorManager.registerListener(this, mRotationV, SensorManager.SENSOR_DELAY_UI);
         }
     }
 
-    public void noSensorsAlert(){
+    public void noSensorAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setMessage("Your device doesn't support the Compass.")
                 .setCancelable(false)
                 .setNegativeButton("Close",new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
                     }
                 });
-        alertDialog.show();
+        //alertDialog.show();
     }
 
     public void stop() {
@@ -161,8 +136,6 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             if(haveSensor)
                 mSensorManager.unregisterListener(this,mRotationV);
         }
-        System.out.println("stoppar");
-        v.cancel();
     }
 
     @Override
@@ -174,34 +147,9 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     @Override
     protected void onResume() {
         super.onResume();
-        //start();
+        start();
     }
 
 
-
-/*    public void setButtonPressed(View view) {
-        switch (view.getId()){
-            case R.id.bN:
-                choosenDirection = "N";
-                break;
-            case R.id.bW:
-                choosenDirection = "W";
-                break;
-            case R.id.bE:
-                choosenDirection = "E";
-                break;
-            case R.id.bS:
-                choosenDirection = "S";
-                break;
-        }
-        setButtonFocused((TextView) view);
-    }*/
-
-/*    public void setButtonFocused(TextView view) {
-        for (TextView button : buttons) {
-            button.setTextColor(Color.parseColor("#000000"));
-        }
-        view.setTextColor(Color.parseColor("#FFB86191"));
-    }*/
-
 }
+

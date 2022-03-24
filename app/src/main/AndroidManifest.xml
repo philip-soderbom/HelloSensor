@@ -24,7 +24,9 @@
 
         <activity
             android:name=".CompassActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data

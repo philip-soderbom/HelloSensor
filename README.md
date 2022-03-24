@@ -25,6 +25,7 @@ Gjorde detta eftersom jag fick varningar om att man inte skulle konkatenera text
 ### Compass
 - Artikel: https://www.wlsdevelop.com/index.php/en/blog?option=com_content&view=article&id=38
 
+Kollade denna video: https://www.youtube.com/watch?v=nOQxq2YpEjQ
 
 
 
