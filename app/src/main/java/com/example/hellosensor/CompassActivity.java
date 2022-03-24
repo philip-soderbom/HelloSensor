@@ -178,8 +178,8 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             txt_north.setVisibility(View.VISIBLE);
             txt_azimuth.setVisibility(View.INVISIBLE);
 
-            final MediaPlayer mp2 = MediaPlayer.create(this, R.raw.success_bell);
-            mp2.start();
+            //final MediaPlayer mp2 = MediaPlayer.create(this, R.raw.success_bell);
+            //mp2.start();
 
         }
         else {

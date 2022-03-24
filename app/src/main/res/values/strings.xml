@@ -11,6 +11,7 @@
     <string name="acc_head_text">Accelerometer values:</string>
     <string name="accelerometer_value">%1$s: %2$s</string>
     <string name="orientation_value">%1$s: %2$s</string>
+    <string name="flat_text">%1$s</string>
 
     <!-- ========= COMPASS ========= -->
     <string name="compass_heading">Heading: %1$s degrees</string>

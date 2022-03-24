@@ -1,8 +1,10 @@
 package com.example.hellosensor;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
@@ -15,7 +17,8 @@ import java.text.DecimalFormat;
 
 public class AccelerometerActivity extends AppCompatActivity implements SensorEventListener {
 
-    private TextView xValueText, yValueText, zValueText, orientation;
+    private TextView xValueText, yValueText, zValueText, orientation, flatText;
+    ConstraintLayout bg;
     private Sensor accelerometer;
     private SensorManager SM;
 
@@ -38,6 +41,8 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         yValueText = findViewById(R.id.yValue);
         zValueText = findViewById(R.id.zValue);
 
+        flatText = findViewById(R.id.flat_text);
+        bg = findViewById(R.id.accelerometer_bg);
         orientation = findViewById(R.id.orientationText);
 
     }
@@ -66,6 +71,13 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
 
         detectOrientation(xValue, yValue, zValue);
+        if (zValue > 9.8 && zValue < 9.82) {
+            flatText.setText(getString(R.string.flat_text, "Flat"));
+            bg.setBackgroundResource(R.color.green);
+        } else {
+            flatText.setText("");
+            bg.setBackgroundResource(R.color.white);
+        }
     }
 
     private void detectOrientation(double x, double y, double z) {
