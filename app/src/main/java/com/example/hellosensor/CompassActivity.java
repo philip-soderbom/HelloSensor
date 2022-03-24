@@ -3,11 +3,15 @@ package com.example.hellosensor;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,8 +21,9 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
     ImageView img_compass;
     TextView txt_azimuth;
+    TextView txt_north;
     int mAzimuth;
-    private SensorManager mSensorManager;
+    private SensorManager SM;
     private Sensor mRotationV, mAccelerometer, mMagnetometer;
     float[] rMat = new float[9];
     float[] orientation = new float[9];
@@ -35,9 +40,21 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
 
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        SM = (SensorManager) getSystemService(SENSOR_SERVICE);
         img_compass = (ImageView) findViewById(R.id.img_compass);
         txt_azimuth = (TextView) findViewById(R.id.txt_azimuth);
+        txt_north = (TextView) findViewById(R.id.txt_north);
+
+
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.success_bell);
+        Button playSoundBtn = (Button) findViewById(R.id.play_sound);
+
+        playSoundBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    mp.start();
+            }
+        });
 
         start();
     }
@@ -68,7 +85,10 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         mAzimuth = Math.round(mAzimuth);
         img_compass.setRotation(-mAzimuth);
 
+        niceNorth(mAzimuth);
+
         String where = "NW";
+
 
         if (mAzimuth >= 350 || mAzimuth <= 10)
             where = "N";
@@ -88,6 +108,8 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             where = "NE";
 
         txt_azimuth.setText(mAzimuth + "° " + where);
+        txt_north.setText(mAzimuth + "° " + where);
+
     }
 
     @Override
@@ -96,21 +118,21 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     }
 
     public void start() {
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
-            if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null || mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null) {
+        if (SM.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
+            if (SM.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null || SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null) {
                 noSensorAlert();
             }
             else {
-                mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-                mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+                mAccelerometer = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+                mMagnetometer = SM.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-                haveSensor = mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
-                haveSensor2 = mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_UI);
+                haveSensor = SM.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+                haveSensor2 = SM.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_UI);
             }
         }
         else {
-            mRotationV = mSensorManager.getDefaultSensor((Sensor.TYPE_ROTATION_VECTOR));
-            haveSensor = mSensorManager.registerListener(this, mRotationV, SensorManager.SENSOR_DELAY_UI);
+            mRotationV = SM.getDefaultSensor((Sensor.TYPE_ROTATION_VECTOR));
+            haveSensor = SM.registerListener(this, mRotationV, SensorManager.SENSOR_DELAY_UI);
         }
     }
 
@@ -129,12 +151,12 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
     public void stop() {
         if(haveSensor && haveSensor2){
-            mSensorManager.unregisterListener(this,mAccelerometer);
-            mSensorManager.unregisterListener(this,mMagnetometer);
+            SM.unregisterListener(this,mAccelerometer);
+            SM.unregisterListener(this,mMagnetometer);
         }
         else{
             if(haveSensor)
-                mSensorManager.unregisterListener(this,mRotationV);
+                SM.unregisterListener(this,mRotationV);
         }
     }
 
@@ -149,6 +171,23 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         super.onResume();
         start();
     }
+
+    public void niceNorth(int azi){
+
+        if(azi >= 350 || azi <= 10){
+            txt_north.setVisibility(View.VISIBLE);
+            txt_azimuth.setVisibility(View.INVISIBLE);
+
+            final MediaPlayer mp2 = MediaPlayer.create(this, R.raw.success_bell);
+            mp2.start();
+
+        }
+        else {
+            txt_north.setVisibility(View.INVISIBLE);
+            txt_azimuth.setVisibility(View.VISIBLE);
+        }
+    }
+
 
 
 }
