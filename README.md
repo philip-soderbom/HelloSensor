@@ -17,17 +17,14 @@ Resurser som har använts:
     - Uppdateringarna gör jag i metoden onSensorChanged() som kommer från interfacet
     SensorEventListener som klassen implementerar
 
-För att avrunda decimalerna tog jag hjälp av denna sida: https://www.baeldung.com/java-round-decimal-number
+- För att avrunda decimalerna tog jag hjälp av denna sida: https://www.baeldung.com/java-round-decimal-number
 
-Hittade hjälp på Stack Overflow om hur man kunde skapa en **string resource** med placeholders
+- Hittade hjälp på Stack Overflow om hur man kunde skapa en **string resource** med placeholders
 Gjorde detta eftersom jag fick varningar om att man inte skulle konkatenera text med setText
 
 ### Compass
-- Artikel: https://www.wlsdevelop.com/index.php/en/blog?option=com_content&view=article&id=38
-
-Kollade denna video: https://www.youtube.com/watch?v=nOQxq2YpEjQ
-
-
+- Kollade denna video: https://www.youtube.com/watch?v=nOQxq2YpEjQ
+- Har haft svårt att testa kompassen, när jag testar i emulatorn är det ofta som den ej visar rätt
 
 
 
@@ -35,10 +32,10 @@ Kollade denna video: https://www.youtube.com/watch?v=nOQxq2YpEjQ
 
 ### Acceleromter
 
-Jag har lagt till så att man ser vilken lutning telefonen har
+- Jag har lagt till så att man ser vilken lutning telefonen har,
 åtminstone för de exakta lutningarna (upp, ner, vänster, höger)
-
-
+- När telefonen ligger platt (med skärmen uppåt) blir bakgrunden grön och det visas en text "Flat"
 
 
 ### Compass
+- När kompassen pekar norr, så blir texten som visar riktning och grader röd

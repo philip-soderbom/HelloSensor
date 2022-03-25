@@ -3,7 +3,6 @@ package com.example.hellosensor;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,6 +21,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     ImageView img_compass;
     TextView txt_azimuth;
     TextView txt_north;
+    String direction;
     int mAzimuth;
     private SensorManager SM;
     private Sensor mRotationV, mAccelerometer, mMagnetometer;
@@ -64,13 +64,11 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
             SensorManager.getRotationMatrixFromVector(rMat, event.values);
             mAzimuth = (int) ((Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0])+360)%360);
-
         }
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
             mLastAccelerometerSet = true;
-
         } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
             mLastMagnetometerSet = true;
@@ -85,36 +83,39 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         mAzimuth = Math.round(mAzimuth);
         img_compass.setRotation(-mAzimuth);
 
-        niceNorth(mAzimuth);
+        displayNorth(mAzimuth);
 
-        String where = "NW";
+        direction = "NW";
+        detectDirection(mAzimuth);
 
 
+        txt_azimuth.setText(mAzimuth + "° " + direction);
+        txt_north.setText(mAzimuth + "° " + direction);
+
+    }
+    
+    private void detectDirection(int mAzimuth) {
         if (mAzimuth >= 350 || mAzimuth <= 10)
-            where = "N";
+            direction = "N";
         if (mAzimuth < 350 && mAzimuth > 280)
-            where = "NW";
+            direction = "NW";
         if (mAzimuth <= 280 && mAzimuth > 260)
-            where = "W";
+            direction = "W";
         if (mAzimuth <= 260 && mAzimuth > 190)
-            where = "SW";
+            direction = "SW";
         if (mAzimuth <= 190 && mAzimuth > 170)
-            where = "S";
+            direction = "S";
         if (mAzimuth <= 170 && mAzimuth > 100)
-            where = "SE";
+            direction = "SE";
         if (mAzimuth <= 100 && mAzimuth > 80)
-            where = "E";
+            direction = "E";
         if (mAzimuth <= 80 && mAzimuth > 10)
-            where = "NE";
-
-        txt_azimuth.setText(mAzimuth + "° " + where);
-        txt_north.setText(mAzimuth + "° " + where);
-
+            direction = "NE";
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-
+        // not in use
     }
 
     public void start() {
@@ -172,7 +173,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         start();
     }
 
-    public void niceNorth(int azi){
+    public void displayNorth(int azi){
 
         if(azi >= 350 || azi <= 10){
             txt_north.setVisibility(View.VISIBLE);

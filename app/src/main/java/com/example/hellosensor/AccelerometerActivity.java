@@ -36,11 +36,10 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         // register Sensor Listener
         SM.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
-        // Assign variables to TextViews
+        // Assign variables to layout components
         xValueText = findViewById(R.id.xValue);
         yValueText = findViewById(R.id.yValue);
         zValueText = findViewById(R.id.zValue);
-
         flatText = findViewById(R.id.flat_text);
         bg = findViewById(R.id.accelerometer_bg);
         orientation = findViewById(R.id.orientationText);
@@ -71,13 +70,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
 
         detectOrientation(xValue, yValue, zValue);
-        if (zValue > 9.8 && zValue < 9.82) {
-            flatText.setText(getString(R.string.flat_text, "Flat"));
-            bg.setBackgroundResource(R.color.green);
-        } else {
-            flatText.setText("");
-            bg.setBackgroundResource(R.color.white);
-        }
+        detectFlat(zValue);
     }
 
     private void detectOrientation(double x, double y, double z) {
@@ -89,11 +82,20 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         else if (z > limit) setOrientation("Facing Up");
         else if (z < -limit) setOrientation("Facing Down");
         else setOrientation("Not Detected");
-
     }
 
     private void setOrientation(String orientationString) {
         orientation.setText(getString(R.string.orientation_value, "Orientation", orientationString));
+    }
+
+    private void detectFlat(Double zValue) {
+        if (zValue > 9.8 && zValue < 9.82) {
+            flatText.setText(getString(R.string.flat_text, "Flat"));
+            bg.setBackgroundResource(R.color.green);
+        } else {
+            flatText.setText("");
+            bg.setBackgroundResource(R.color.white);
+        }
     }
 
     @Override
