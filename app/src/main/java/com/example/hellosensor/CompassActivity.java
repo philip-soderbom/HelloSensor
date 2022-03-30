@@ -27,6 +27,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     private Sensor mRotationV, mAccelerometer, mMagnetometer;
     float[] rMat = new float[9];
     float[] orientation = new float[9];
+    MediaPlayer mp;
 
     private float[] mLastAccelerometer = new float[3];
     private float[] mLastMagnetometer = new float[3];
@@ -44,19 +45,15 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         img_compass = (ImageView) findViewById(R.id.img_compass);
         txt_azimuth = (TextView) findViewById(R.id.txt_azimuth);
         txt_north = (TextView) findViewById(R.id.txt_north);
-
-
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.success_bell);
-        Button playSoundBtn = (Button) findViewById(R.id.play_sound);
-
-        playSoundBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    mp.start();
-            }
-        });
+        mp = MediaPlayer.create(this, R.raw.success_bell);
 
         start();
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        mp.stop();
+
     }
 
     @Override
@@ -95,8 +92,11 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     }
     
     private void detectDirection(int mAzimuth) {
-        if (mAzimuth >= 350 || mAzimuth <= 10)
+        if (mAzimuth >= 350 || mAzimuth <= 10) {
             direction = "N";
+            playSound();
+        }
+
         if (mAzimuth < 350 && mAzimuth > 280)
             direction = "NW";
         if (mAzimuth <= 280 && mAzimuth > 260)
@@ -187,6 +187,10 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             txt_north.setVisibility(View.INVISIBLE);
             txt_azimuth.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void playSound() {
+        mp.start();
     }
 
 

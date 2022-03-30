@@ -24,7 +24,8 @@ Gjorde detta eftersom jag fick varningar om att man inte skulle konkatenera text
 
 ### Compass
 - Kollade denna video: https://www.youtube.com/watch?v=nOQxq2YpEjQ
-- Har haft svårt att testa kompassen, när jag testar i emulatorn är det ofta som den ej visar rätt
+- Vid test av kompassen i emulatorn i Android Studio är det tveksamt hur väl den fungerar
+    - Har pratat med andra kursare som har gjort likadant kodmässigt, där kompassen fungerar korrekt när den testas på en Android telefon
 
 
 
@@ -32,10 +33,15 @@ Gjorde detta eftersom jag fick varningar om att man inte skulle konkatenera text
 
 ### Acceleromter
 
-- Jag har lagt till så att man ser vilken lutning telefonen har,
-åtminstone för de exakta lutningarna (upp, ner, vänster, höger)
+- Jag har lagt till så att man ser vilken lutning telefonen har
+    - Höger, Vänster, Upp, Ned
+    - Skärmen rakt upp, skärmen rakt ned
 - När telefonen ligger platt (med skärmen uppåt) blir bakgrunden grön och det visas en text "Flat"
 
 
 ### Compass
-- När kompassen pekar norr, så blir texten som visar riktning och grader röd
+- När kompassen pekar norr
+    - Blir texten som visar riktning och grader röd
+    - Det spelas ett ljud (success bell) i ett visst intervall
+- Upptäckte att detta ljud fortsatte att spelas i samma takt även om man klickade in på accelerometern
+    - För att lösa det lade jag till onDestroy() i vilken mediaspelaren stoppas.
